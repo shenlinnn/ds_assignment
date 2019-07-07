@@ -6,6 +6,8 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
 
+x_cols = ['trip_distance', 'driver_gps_accuracy', 'pickup_distance', 'is_peak', 'total_failed', 'total_completed']
+
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
@@ -15,7 +17,6 @@ def main(input_filepath, output_filepath):
     df = pd.read_csv(input_filepath + '/allocations.csv')
 
     # select features for modelling 
-    x_cols = ['trip_distance', 'driver_gps_accuracy', 'pickup_distance', 'is_peak', 'total_failed', 'total_completed']
     X = df[x_cols]
     y = df['output']
 

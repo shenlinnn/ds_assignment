@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
-import pandas_gbq
 import click
 from pathlib import Path
+
+import pandas_gbq
 
 @click.command()
 @click.argument('output_filepath', type=click.Path())
@@ -25,7 +26,9 @@ def main(output_filepath):
 
     ## train
     agg_booking = {'event_timestamp': 'min', 'trip_distance': 'mean', 'pickup_latitude': 'mean', 'pickup_longitude': 'mean'}
-    booking = booking_log.drop_duplicates().fillna('').groupby(['order_id', 'booking_status', 'customer_id', 'driver_id'], as_index=False).agg(agg_booking)
+    booking = booking_log.drop_duplicates().fillna('')\
+                        .groupby(['order_id', 'booking_status', 'customer_id', 'driver_id'], as_index=False)\
+                        .agg(agg_booking)
     
     agg_driver = {'driver_latitude': 'mean', 'driver_longitude': 'mean', 'driver_gps_accuracy': 'mean'}
     driver = driver_log.drop_duplicates().groupby(['order_id', 'driver_id'], as_index=False).agg(agg_driver)
@@ -39,7 +42,6 @@ def main(output_filepath):
     driver.to_csv(output_filepath + '/driver.csv', index=False)
     test.to_csv(output_filepath + '/test.csv', index=False)
     
-
     logger = logging.getLogger(__name__)
     logger.info('making interim data set from GCP raw data')
 

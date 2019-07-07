@@ -88,6 +88,7 @@ def feature_eng(output_filepath):
     completed = df.groupby(['driver_id'], as_index=False)['completed'].sum().rename(columns={'completed': 'total_completed'})
     processed = pd.merge(df, completed, on ='driver_id')
 
+
     processed.to_csv(output_filepath + '/allocations.csv', index=False)
     logger = logging.getLogger(__name__)
     logger.info('making processed data set from interim data')
