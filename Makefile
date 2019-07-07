@@ -85,6 +85,15 @@ test_environment:
 #################################################################################
 # Self Documenting Commands                                                     #
 #################################################################################
+setup: 
+	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+
+## Make Dataset
+run: setup
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/processed
+	$(PYTHON_INTERPRETER) src/features/build_features.py 
+	$(PYTHON_INTERPRETER) src/models/train_model.py 
+	$(PYTHON_INTERPRETER) src/models/predict_model.py 
 
 .DEFAULT_GOAL := help
 
