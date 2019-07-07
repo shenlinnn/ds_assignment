@@ -7,7 +7,6 @@ import numpy as np
 import geopy.distance
 import datetime
 import pytz
-import seaborn as sb
 
 
 def cal_dist(row):
@@ -73,7 +72,7 @@ def feature_eng(output_filepath):
     df = dataset.copy()
 
     # distance between pickup and driver location 
-    #df['pickup_distance'] = df.apply(cal_dist, axis=1)
+    df['pickup_distance'] = df.apply(cal_dist, axis=1)
 
     # check is booking CREATED timestamp is in peak hour
     # defined by gojek official website, considering Jarkata timezone
