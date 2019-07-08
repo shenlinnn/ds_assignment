@@ -87,8 +87,15 @@ test_environment:
 #################################################################################
 setup: 
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+data:
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/interim
+features:
+	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim data/processed
+train:
+	$(PYTHON_INTERPRETER) src/models/train_model.py data/processed models
+predict:
+	$(PYTHON_INTERPRETER) src/models/predict_model.py data/processed models
 
-## Make Dataset
 run: setup
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/interim
 	$(PYTHON_INTERPRETER) src/features/build_features.py data/interim data/processed
