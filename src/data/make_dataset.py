@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pandas_gbq
 
+from filename import BOOKING_PREPROCESSED, PARTICIPANT_PREPROCESSED, TEST_PREPROCESSED
+
 @click.command()
 @click.argument('output_filepath', type=click.Path())
 
@@ -38,9 +40,9 @@ def main(output_filepath):
     test = test_data.drop_duplicates().groupby(['order_id', 'customer_id', 'driver_id'], as_index=False).agg(agg_test)
 
     #### writing to /data/interim
-    booking.to_csv(output_filepath + '/booking.csv', index=False)
-    driver.to_csv(output_filepath + '/driver.csv', index=False)
-    test.to_csv(output_filepath + '/test.csv', index=False)
+    booking.to_csv(output_filepath + '/%s' % BOOKING_PREPROCESSED, index=False)
+    driver.to_csv(output_filepath + '/%s' % PARTICIPANT_PREPROCESSED, index=False)
+    test.to_csv(output_filepath + '/%s' % TEST_PREPROCESSED, index=False)
     
     logger = logging.getLogger(__name__)
     logger.info('making interim data set from GCP raw data')

@@ -6,6 +6,8 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
 
+from filename import TRAIN, MODEL_NAME
+
 x_cols = ['trip_distance', 'driver_gps_accuracy', 'pickup_distance', 'is_peak', 'total_failed', 'total_completed']
 
 @click.command()
@@ -14,7 +16,7 @@ x_cols = ['trip_distance', 'driver_gps_accuracy', 'pickup_distance', 'is_peak', 
 
 def main(input_filepath, output_filepath):
     # load processed data 
-    df = pd.read_csv(input_filepath + '/train_model.csv')
+    df = pd.read_csv(input_filepath + '/%s' % TRAIN)
 
     # select features for modelling 
     X = df[x_cols]
@@ -25,7 +27,7 @@ def main(input_filepath, output_filepath):
     lr_final.fit(X, y)
 
     # output a pickle file for the model
-    joblib.dump(lr_final, output_filepath + '/lr.pkl') 
+    joblib.dump(lr_final, output_filepath + '/%s' % MODEL_NAME) 
 
     logger = logging.getLogger(__name__)
     logger.info('save trained model')

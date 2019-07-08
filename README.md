@@ -39,6 +39,10 @@ make test
 
 load test data from data/processed and model from models, save predictions to models
 
+### EDA
+
+Exploratory analysis and different models analysis in `notebooks/ds_assignment.ipynb`
+
 Project Organization
 ------------
 

@@ -8,6 +8,7 @@ import geopy.distance
 import datetime
 import pytz
 
+from filename import BOOKING_PREPROCESSED, PARTICIPANT_PREPROCESSED, TEST_PREPROCESSED, TRAIN_TRANSFORMED, TRAIN, TEST
 
 def cal_dist(row):
     lat_x, long_x, lat_y, long_y = row['pickup_latitude'], row['pickup_longitude'], row['driver_latitude'], row['driver_longitude']
@@ -42,8 +43,8 @@ def is_peak(row):
             return 0
 
 def train_transform(input_filepath, output_filepath):
-    booking = pd.read_csv(input_filepath + '/booking.csv')
-    driver = pd.read_csv(input_filepath + '/driver.csv')
+    booking = pd.read_csv(input_filepath + '/%s' % BOOKING_PREPROCESSED)
+    driver = pd.read_csv(input_filepath + '/%s' % PARTICIPANT_PREPROCESSED)
 
     # create base dataset, each row represents one booking allocation
     # output indicates whether the allocation trip is completed
@@ -59,11 +60,11 @@ def train_transform(input_filepath, output_filepath):
     driver_cols = ['order_id', 'driver_id', 'driver_latitude', 'driver_longitude', 'driver_gps_accuracy']
     driver_base = driver[driver_cols]
 
-    train = pd.merge(driver_base, booking_base, on=['order_id'], how='left')
-    train['output'] = np.where(train['driver_id'] == train['booking_driver_id'], 1, 0)
-    train = train.drop(columns = "booking_driver_id")
+    train_transformed = pd.merge(driver_base, booking_base, on=['order_id'], how='left')
+    train_transformed['output'] = np.where(train_transformed['driver_id'] == train_transformed['booking_driver_id'], 1, 0)
+    train_transformed = train_transformed.drop(columns = "booking_driver_id")
 
-    train.to_csv(output_filepath + '/train_transformed.csv', index=False)
+    train_transformed.to_csv(output_filepath + '/%s' % TRAIN_TRANSFORMED, index=False)
 
 def create_feature(df, failed, completed):
     df = pd.merge(df, failed, on ='driver_id', how='left').fillna(0)
@@ -78,8 +79,8 @@ def create_feature(df, failed, completed):
 
 def feature_eng(input_filepath, output_filepath):
     # create new features
-    train = pd.read_csv(output_filepath + '/train_transformed.csv')
-    test = pd.read_csv(input_filepath + '/test.csv')
+    train = pd.read_csv(output_filepath + '/%s' % TRAIN_TRANSFORMED)
+    test = pd.read_csv(input_filepath + '/%s' % TEST_PREPROCESSED)
 
     # number of times a driver is allocated but failed to complete trip (regardless failure reason)
     train['failed'] = np.where(train['output'] == 1, 0, 1)
@@ -92,8 +93,8 @@ def feature_eng(input_filepath, output_filepath):
     train = create_feature(train, failed, completed)
     test = create_feature(test, failed, completed)
 
-    train.to_csv(output_filepath + '/train_model.csv', index=False)
-    test.to_csv(output_filepath + '/test_model.csv', index=False)
+    train.to_csv(output_filepath + '/%s' % TRAIN, index=False)
+    test.to_csv(output_filepath + '/%s' % TEST, index=False)
 
     logger = logging.getLogger(__name__)
     logger.info('making processed data set from interim data')
