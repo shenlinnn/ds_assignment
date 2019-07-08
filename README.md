@@ -5,10 +5,29 @@ gojek_ds
 #### Prerequisites
 `make setup`
 
-### Build Model and Make Prediction
-`make run`
+### Run Project
 
-#### Raw Data Source
+#### Download and preprocess data
+`make data`
+
+load data from GCP using **pandas_gpq** package, may need to set up access on first connection according to pop-up instruction <br>
+
+processed data will be saved in data/interim folder
+
+#### Feature engineering
+`make features`
+
+process data from data/interim and save to data/processed folder
+
+#### Train model
+`make train`
+
+read data from data/processed and save the trained model to models
+
+#### Test model 
+`make test`
+
+load test data from data/processed and model from models, save predictions to models
 
 Project Organization
 ------------
