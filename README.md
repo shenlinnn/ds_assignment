@@ -1,7 +1,10 @@
 gojek_ds
 ==============================
+HOW TO RUN
 
-gojek ds assignment
+cd ds_assignment 
+make run
+
 
 Project Organization
 ------------
