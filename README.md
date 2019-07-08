@@ -14,7 +14,7 @@ make setup
 make data
 ```
 
-load data from GCP using **pandas_gpq** package, may need to set up access on first connection according to pop-up instruction <br>
+load data from GCP using **pandas_gpq** package, may need to set up google account access on first connection according to pop-up instructions <br>
 
 processed data will be saved in data/interim folder
 
