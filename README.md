@@ -1,5 +1,9 @@
 gojek_ds
 ==============================
+### EDA
+
+exploratory analysis and different models analysis in `notebooks/ds_assignment.ipynb`
+
 ### Getting Started
 
 #### Prerequisites
@@ -39,9 +43,6 @@ make test
 
 load test data from data/processed and model from models, save predictions to models
 
-### EDA
-
-exploratory analysis and different models analysis in `notebooks/ds_assignment.ipynb`
 
 Project Organization
 ------------
