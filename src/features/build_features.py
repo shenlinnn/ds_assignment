@@ -41,7 +41,7 @@ def is_peak(row):
         else:
             return 0
 
-def data_transform(input_filepath, output_filepath):
+def train_transform(input_filepath, output_filepath):
     booking = pd.read_csv(input_filepath + '/booking.csv')
     driver = pd.read_csv(input_filepath + '/driver.csv')
 
@@ -59,37 +59,42 @@ def data_transform(input_filepath, output_filepath):
     driver_cols = ['order_id', 'driver_id', 'driver_latitude', 'driver_longitude', 'driver_gps_accuracy']
     driver_base = driver[driver_cols]
 
-    dataset = pd.merge(driver_base, booking_base, on=['order_id'], how='left')
-    dataset['output'] = np.where(dataset['driver_id'] == dataset['booking_driver_id'], 1, 0)
-    dataset = dataset.drop(columns = "booking_driver_id")
+    train = pd.merge(driver_base, booking_base, on=['order_id'], how='left')
+    train['output'] = np.where(train['driver_id'] == train['booking_driver_id'], 1, 0)
+    train = train.drop(columns = "booking_driver_id")
 
-    dataset.to_csv(output_filepath + '/transformed.csv', index=False)
+    train.to_csv(output_filepath + '/train_transformed.csv', index=False)
 
-
-def feature_eng(output_filepath):
-    # create new features
-    dataset = pd.read_csv(output_filepath + '/transformed.csv')
-    df = dataset.copy()
+def create_feature(df, failed, completed):
+    df = pd.merge(df, failed, on ='driver_id', how='left').fillna(0)
+    df = pd.merge(df, completed, on ='driver_id', how='left').fillna(0)
 
     # distance between pickup and driver location 
     df['pickup_distance'] = df.apply(cal_dist, axis=1)
-
     # check is booking CREATED timestamp is in peak hour
     # defined by gojek official website, considering Jarkata timezone
     df['is_peak'] = df.apply(is_peak, axis=1)
+    return df
+
+def feature_eng(input_filepath, output_filepath):
+    # create new features
+    train = pd.read_csv(output_filepath + '/train_transformed.csv')
+    test = pd.read_csv(input_filepath + '/test.csv')
 
     # number of times a driver is allocated but failed to complete trip (regardless failure reason)
-    df['failed'] = np.where(df['output'] == 1, 0, 1)
-    failed = df.groupby(['driver_id'], as_index=False)['failed'].sum().rename(columns={'failed': 'total_failed'})
-    df = pd.merge(df, failed, on ='driver_id')
+    train['failed'] = np.where(train['output'] == 1, 0, 1)
+    failed = train.groupby(['driver_id'], as_index=False)['failed'].sum().rename(columns={'failed': 'total_failed'})
 
     # number of times a driver completes trip 
-    df['completed'] = np.where(df['output'] == 1, 1, 0)
-    completed = df.groupby(['driver_id'], as_index=False)['completed'].sum().rename(columns={'completed': 'total_completed'})
-    processed = pd.merge(df, completed, on ='driver_id')
+    train['completed'] = np.where(train['output'] == 1, 1, 0)
+    completed = train.groupby(['driver_id'], as_index=False)['completed'].sum().rename(columns={'completed': 'total_completed'})
 
+    train = create_feature(train, failed, completed)
+    test = create_feature(test, failed, completed)
 
-    processed.to_csv(output_filepath + '/allocations.csv', index=False)
+    train.to_csv(output_filepath + '/train_model.csv', index=False)
+    test.to_csv(output_filepath + '/test_model.csv', index=False)
+
     logger = logging.getLogger(__name__)
     logger.info('making processed data set from interim data')
 
@@ -99,8 +104,8 @@ def feature_eng(output_filepath):
 @click.argument('output_filepath', type=click.Path())
 
 def main(input_filepath, output_filepath):
-    data_transform(input_filepath, output_filepath)
-    feature_eng(output_filepath)
+    train_transform(input_filepath, output_filepath)
+    feature_eng(input_filepath, output_filepath)
 
   
 if __name__ == '__main__':

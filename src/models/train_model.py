@@ -14,7 +14,7 @@ x_cols = ['trip_distance', 'driver_gps_accuracy', 'pickup_distance', 'is_peak', 
 
 def main(input_filepath, output_filepath):
     # load processed data 
-    df = pd.read_csv(input_filepath + '/allocations.csv')
+    df = pd.read_csv(input_filepath + '/train_model.csv')
 
     # select features for modelling 
     X = df[x_cols]

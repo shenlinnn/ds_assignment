@@ -15,17 +15,7 @@ from src.models.train_model import x_cols
 
 def main(data_folder, model_folder):
     # load test data
-    test = pd.read_csv(data_folder + '/interim/test.csv')
-
-    # transform test data
-    test['pickup_distance'] = test.apply(cal_dist, axis=1)
-    test['is_peak'] = test.apply(is_peak, axis=1)
-
-    failed = pd.read_csv(data_folder + '/processed/failed.csv')
-    completed = pd.read_csv(data_folder + '/processed/completed.csv')
-
-    test = pd.merge(test, failed, on='driver_id', how='left').fillna(0)
-    test = pd.merge(test, completed, on='driver_id', how='left').fillna(0)
+    test = pd.read_csv(data_folder + '/processed/test_model.csv')
     X_test = test[x_cols]
 
     # load trained model
