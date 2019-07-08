@@ -44,6 +44,8 @@ make test
 load test data from data/processed and model from models, save predictions to models
 
 
+##### write up in writeup.pdf and sql for phase 1 in phase1.sql
+
 Project Organization
 ------------
 
