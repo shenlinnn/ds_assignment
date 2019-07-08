@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas_gbq
 
-from filename import BOOKING_PREPROCESSED, PARTICIPANT_PREPROCESSED, TEST_PREPROCESSED
+from src.filename import BOOKING_PREPROCESSED, PARTICIPANT_PREPROCESSED, TEST_PREPROCESSED
 
 @click.command()
 @click.argument('output_filepath', type=click.Path())

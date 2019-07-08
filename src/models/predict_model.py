@@ -8,7 +8,7 @@ from sklearn.externals import joblib
 
 from src.features.build_features import cal_dist, is_peak
 from src.models.train_model import x_cols
-from filename import TEST, MODEL_NAME, RESULT
+from src.filename import TEST, MODEL_NAME, RESULT
 
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))

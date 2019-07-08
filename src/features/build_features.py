@@ -8,7 +8,7 @@ import geopy.distance
 import datetime
 import pytz
 
-from filename import BOOKING_PREPROCESSED, PARTICIPANT_PREPROCESSED, TEST_PREPROCESSED, TRAIN_TRANSFORMED, TRAIN, TEST
+from src.filename import BOOKING_PREPROCESSED, PARTICIPANT_PREPROCESSED, TEST_PREPROCESSED, TRAIN_TRANSFORMED, TRAIN, TEST
 
 def cal_dist(row):
     lat_x, long_x, lat_y, long_y = row['pickup_latitude'], row['pickup_longitude'], row['driver_latitude'], row['driver_longitude']

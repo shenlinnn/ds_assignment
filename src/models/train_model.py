@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
 
-from filename import TRAIN, MODEL_NAME
+from src.filename import TRAIN, MODEL_NAME
 
 x_cols = ['trip_distance', 'driver_gps_accuracy', 'pickup_distance', 'is_peak', 'total_failed', 'total_completed']
 
