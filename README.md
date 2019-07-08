@@ -1,5 +1,7 @@
 gojek_ds
 ==============================
+#### write up in writeup.pdf and sql for phase 1 in phase1.sql
+
 ### EDA
 
 exploratory analysis and different models analysis in `notebooks/ds_assignment.ipynb`
@@ -44,7 +46,6 @@ make test
 load test data from data/processed and model from models, save predictions to models
 
 
-##### write up in writeup.pdf and sql for phase 1 in phase1.sql
 
 Project Organization
 ------------
