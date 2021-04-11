@@ -1,4 +1,4 @@
-gojek_ds
+DS assignment
 ==============================
 #### write up in writeup.pdf and sql for phase 1 in phase1.sql
 
